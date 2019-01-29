@@ -32,96 +32,63 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "fsl_debug_console.h"
-#include "board.h"
-#include "fsl_pit.h"
+#include "fsl_phy.h"
+/* TODO: insert other include files here. */
 
-#include "pin_mux.h"
-#include "clock_config.h"
 /*******************************************************************************
  * Definitions
  ******************************************************************************/
-#define PIT_LED_HANDLER PIT_IRQHandler
-#define PIT_IRQ_ID PIT_IRQn
-/* Get source clock for PIT driver */
-#define PIT_SOURCE_CLOCK CLOCK_GetFreq(kCLOCK_OscClk)
-#define LED_INIT() USER_LED_INIT(LOGIC_LED_OFF)
-#define LED_TOGGLE() USER_LED_TOGGLE()
+
+/* TODO: insert definitions here. */
 
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
 
+/* TODO: insert prototypes here. */
+ 
 /*******************************************************************************
  * Variables
  ******************************************************************************/
 
-volatile bool pitIsrFlag = false;
+/* TODO: insert variables here. */
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
-void PIT_LED_HANDLER(void)
+
+status_t PHY_Init(ENET_Type *base, uint32_t phyAddr, uint32_t srcClock_Hz)
 {
-    /* Clear interrupt flag.*/
-    PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
-    pitIsrFlag = true;
+    /* TODO: insert implementation here. */
+    return kStatus_Fail;
 }
 
-/*!
- * @brief Main function
- */
-int main(void)
+status_t PHY_Write(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t data)
 {
-    /* Structure of initialize PIT */
-    pit_config_t pitConfig;
+    /* TODO: insert implementation here. */
+    return kStatus_Fail;
+}
 
-    /* Initialize and enable LED */
-    LED_INIT();
+status_t PHY_Read(ENET_Type *base, uint32_t phyAddr, uint32_t phyReg, uint32_t *dataPtr)
+{
+    /* TODO: insert implementation here. */
+    return kStatus_Fail;
+}
 
-    /* Board pin, clock, debug console init */
-    BOARD_ConfigMPU();
-    BOARD_InitPins();
-    BOARD_BootClockRUN();
-    BOARD_InitDebugConsole();
+status_t PHY_EnableLoopback(ENET_Type *base, uint32_t phyAddr, phy_loop_t mode, phy_speed_t speed, bool enable)
+{
+    /* TODO: insert implementation here. */
+    return kStatus_Fail;
+}
 
-    /* Enable clock gate for GPIO1 */
-    CLOCK_EnableClock(kCLOCK_Gpio1);
+status_t PHY_GetLinkStatus(ENET_Type *base, uint32_t phyAddr, bool *status)
+{
+    /* TODO: insert implementation here. */
+    return kStatus_Fail;
+}
 
-    /* Set PERCLK_CLK source to OSC_CLK*/
-    CLOCK_SetMux(kCLOCK_PerclkMux, 1U);
-    /* Set PERCLK_CLK divider to 1 */
-    CLOCK_SetDiv(kCLOCK_PerclkDiv, 0U);
-
-    /*
-     * pitConfig.enableRunInDebug = false;
-     */
-    PIT_GetDefaultConfig(&pitConfig);
-
-    /* Init pit module */
-    PIT_Init(PIT, &pitConfig);
-
-    /* Set timer period for channel 0 */
-    PIT_SetTimerPeriod(PIT, kPIT_Chnl_0, USEC_TO_COUNT(1000000U, PIT_SOURCE_CLOCK));
-
-    /* Enable timer interrupts for channel 0 */
-    PIT_EnableInterrupts(PIT, kPIT_Chnl_0, kPIT_TimerInterruptEnable);
-
-    /* Enable at the NVIC */
-    EnableIRQ(PIT_IRQ_ID);
-
-    /* Start channel 0 */
-    PRINTF("\r\nStarting channel No.0 ...");
-    PIT_StartTimer(PIT, kPIT_Chnl_0);
-
-    while (true)
-    {
-        /* Check whether occur interupt and toggle LED */
-        if (true == pitIsrFlag)
-        {
-            PRINTF("\r\n Channel No.0 interrupt is occured !");
-            LED_TOGGLE();
-            pitIsrFlag = false;
-        }
-    }
+status_t PHY_GetLinkSpeedDuplex(ENET_Type *base, uint32_t phyAddr, phy_speed_t *speed, phy_duplex_t *duplex)
+{
+    /* TODO: insert implementation here. */
+    return kStatus_Fail;
 }
